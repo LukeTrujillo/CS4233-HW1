@@ -90,6 +90,14 @@ public class Board
 	{
 		return nColumns;
 	}
+	
+	/**
+	 * @return the nRows
+	 */
+	public int getnRows()
+	{
+		return nRows;
+	}
 
 	/**
 	 * @param nRows the nRows to set
