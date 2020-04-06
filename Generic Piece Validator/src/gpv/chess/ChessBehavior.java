@@ -120,14 +120,25 @@ public interface ChessBehavior {
 				|| ChessBehavior.orthogonalMovement.allowed(from, to, board);
 	};
 	
+	/**
+	 * This lambda controls the movement for the rook piece
+	 * @return true if it is trying to move to a valid spot, otherwise false
+	 */
 	public static Behavior rookBehavior = (from, to, board) -> {
-		return false;
+		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) //general behavior
+			return false;
+		
+		return ChessBehavior.straightMovement.allowed(from, to, board); //rooks only have straight movement
 	};
 	
 	public static Behavior pawnBehavior = (from, to, board) -> {
 		return false;
 	};
 	
+	/**
+	 * This lambda controls the movement for the knight piece. 
+	 * @return true if knight can move to the spot, otherwise false.
+	 */
 	public static Behavior knightBehavior = (from, to, board) -> {
 		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) //general behavior
 			return false;
@@ -142,8 +153,15 @@ public interface ChessBehavior {
 		return attempted_distance == DISTANCE; // these two must match
 	};
 	
+	/**
+	 * This function controls the movment for the bishop. Theu can only move diagonally
+	 * @return true if the bishop can move to the spot, otherwise false
+	 */
 	public static Behavior bishopBehavior = (from, to, board) -> {
-		return false;
+		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) //general behavior
+			return false;	
+		
+		return ChessBehavior.orthogonalMovement.allowed(from, to, board); //the bishop can only move diagonally
 	};
 	public static Behavior kingBehavior = (from, to, board) -> {
 		return false;

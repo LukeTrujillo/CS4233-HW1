@@ -147,4 +147,85 @@ public class ChessBehaviorTests {
 		assertFalse(bn.canMove(c, makeCoordinate(8,8), board));
 		assertFalse(bn.canMove(c, makeCoordinate(1,1), board));
 	}
+	
+	//Queen piece movement
+	@Test
+	public void testQueenCanMoveOrthonally() {
+		ChessPiece bn = factory.makePiece(BLACKQUEEN);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		assertTrue(bn.canMove(c, makeCoordinate(1, 1), board));
+		assertTrue(bn.canMove(c, makeCoordinate(7, 1), board));
+		assertTrue(bn.canMove(c, makeCoordinate(8, 8), board));
+		assertTrue(bn.canMove(c, makeCoordinate(1, 7), board));
+	}
+	
+	@Test 
+	public void testQueenCanMoveStraight() {
+		ChessPiece bn = factory.makePiece(BLACKQUEEN);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		assertTrue(bn.canMove(c, makeCoordinate(4, 8), board));
+		assertTrue(bn.canMove(c, makeCoordinate(4, 1), board));
+		assertTrue(bn.canMove(c, makeCoordinate(8, 4), board));
+		assertTrue(bn.canMove(c, makeCoordinate(1, 4), board));
+	}
+	
+	@Test
+	public void testQueenCanNotDoLMove() {
+		ChessPiece bn = factory.makePiece(BLACKQUEEN);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		assertFalse(bn.canMove(c, makeCoordinate(5, 2), board));
+		assertFalse(bn.canMove(c, makeCoordinate(3, 6), board));
+	}
+	
+	//Tests for the Rook piece
+	@Test 
+	public void testRookCanMoveXDirection() {
+		ChessPiece bn = factory.makePiece(BLACKROOK);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		assertTrue(bn.canMove(c, makeCoordinate(8, 4), board));
+		assertTrue(bn.canMove(c, makeCoordinate(1, 4), board));
+	}
+	@Test 
+	public void testRookCanMoveYDirection() {
+		ChessPiece bn = factory.makePiece(BLACKROOK);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		assertTrue(bn.canMove(c, makeCoordinate(4, 8), board));
+		assertTrue(bn.canMove(c, makeCoordinate(4, 1), board));
+	}
+	
+	//Tests for the bishop
+	@Test
+	public void testBishopCanMoveOrthonally() {
+		ChessPiece bn = factory.makePiece(BLACKBISHOP);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		assertTrue(bn.canMove(c, makeCoordinate(1, 1), board));
+		assertTrue(bn.canMove(c, makeCoordinate(7, 1), board));
+		assertTrue(bn.canMove(c, makeCoordinate(8, 8), board));
+		assertTrue(bn.canMove(c, makeCoordinate(1, 7), board));
+	}
+	
+	
+	@Test 
+	public void testBishopCanNotMoveStraight() {
+		ChessPiece bn = factory.makePiece(BLACKBISHOP);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		assertFalse(bn.canMove(c, makeCoordinate(8, 4), board));
+		assertFalse(bn.canMove(c, makeCoordinate(1, 4), board));
+		assertFalse(bn.canMove(c, makeCoordinate(4, 8), board));
+		assertFalse(bn.canMove(c, makeCoordinate(4, 1), board));
+	}
 }
