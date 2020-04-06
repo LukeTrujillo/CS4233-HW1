@@ -19,6 +19,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import gpv.util.Board;
+import gpv.util.Coordinate;
 
 /**
  * Tests to ensure that pieces are created correctly and that all pieces
@@ -72,7 +73,7 @@ class ChessPieceTests
 	{
 		ChessPiece p = factory.makePiece(BLACKPAWN);
 		board.putPieceAt(p, makeCoordinate(2, 2));
-		assertEquals(p, board.getPieceAt(makeCoordinate(2, 2)));
+		assertEquals(p, board.getPieceAt(Coordinate.makeCoordinate(2, 2)));
 	}
 
 	@Test
