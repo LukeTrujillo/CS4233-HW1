@@ -64,8 +64,9 @@ public interface ChessBehavior {
 	};
 
 	/**
-	 * This function wraps the behavior that applies to all pieces inside of one lambda for 
-	 * simplicity in programming
+	 * This function wraps the behavior that applies to all pieces inside of one
+	 * lambda for simplicity in programming
+	 * 
 	 * @return true if it passed, false if not
 	 */
 	public static Behavior generalBehavior = (from, to, board) -> {
@@ -75,27 +76,78 @@ public interface ChessBehavior {
 
 	/**
 	 * This function checks if a movement is a vlaid orthogonal movement
+	 * 
 	 * @return true if valid, false if not
 	 */
 	public static Behavior orthogonalMovement = (from, to, board) -> {
-		
-		int distanceX = (int) Math.abs(to.getX() - from.getX()); //the the delta change in the x
-		int distanceY = (int) Math.abs(to.getY() - from.getY()); //get the delta change in the y
-		
-		return distanceX == distanceY; //for them to be a valid diagonal this had be true
+
+		int distanceX = (int) Math.abs(to.getX() - from.getX()); // the the delta change in the x
+		int distanceY = (int) Math.abs(to.getY() - from.getY()); // get the delta change in the y
+
+		return distanceX == distanceY; // for them to be a valid diagonal this had be true
 	};
 
 	/**
 	 * This function checks if a movement is a valid straight (x or y) movement
+	 * 
 	 * @returns true if valid, false if not
 	 */
 	public static Behavior straightMovement = (from, to, board) -> {
-		
-		int distanceX = (int) Math.abs(to.getX() - from.getX()); //the the delta change in the x
-		int distanceY = (int) Math.abs(to.getY() - from.getY()); //get the delta change in the y
-		
-		return (distanceX != 0 && distanceY == 0) || (distanceY != 0 && distanceX == 0); //this must be true for it to be a valid straight movement
+
+		int distanceX = (int) Math.abs(to.getX() - from.getX()); // the the delta change in the x
+		int distanceY = (int) Math.abs(to.getY() - from.getY()); // get the delta change in the y
+
+		return (distanceX != 0 && distanceY == 0) || (distanceY != 0 && distanceX == 0); // this must be true for it to
+																							// be a valid straight
+																							// movement
 	};
 
+	/*
+	 * Beginning of chess piece specific behavior
+	 * 
+	 */
+
+	/**
+	 * This lambda represents the movement behavior of the Queen.
+	 * @return true if the queen can move to the spot, false if not
+	 */
+	public static Behavior queenBehavior = (from, to, board) -> {
+		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) //general behavior
+			return false;
+
+		// passed the general behavior test, now it must return true for one of the following behaviors
+		return ChessBehavior.straightMovement.allowed(from, to, board)
+				|| ChessBehavior.orthogonalMovement.allowed(from, to, board);
+	};
 	
+	public static Behavior rookBehavior = (from, to, board) -> {
+		return false;
+	};
+	
+	public static Behavior pawnBehavior = (from, to, board) -> {
+		return false;
+	};
+	
+	public static Behavior knightBehavior = (from, to, board) -> {
+		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) //general behavior
+			return false;
+		
+		final double DISTANCE = Math.sqrt(Math.pow(2, 2) + Math.pow(1, 2)); // a knight can only travel this distance
+		
+		int distanceX = (int) Math.abs(to.getX() - from.getX()); // the the delta change in the x
+		int distanceY = (int) Math.abs(to.getY() - from.getY()); // get the delta change in the y
+		
+		double attempted_distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2)); //get the distance travelld
+
+		return attempted_distance == DISTANCE; // these two must match
+	};
+	
+	public static Behavior bishopBehavior = (from, to, board) -> {
+		return false;
+	};
+	public static Behavior kingBehavior = (from, to, board) -> {
+		return false;
+	};
+	
+
 }

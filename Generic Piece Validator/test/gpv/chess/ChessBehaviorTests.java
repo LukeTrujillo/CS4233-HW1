@@ -3,6 +3,8 @@ package gpv.chess;
 import org.junit.jupiter.api.*;
 
 import gpv.util.Board;
+import gpv.util.Coordinate;
+
 import static org.junit.Assert.*;
 import static gpv.chess.ChessPieceDescriptor.*;
 import static gpv.util.Coordinate.makeCoordinate;
@@ -117,5 +119,32 @@ public class ChessBehaviorTests {
 		assertFalse(ChessBehavior.straightMovement.allowed(makeCoordinate(8, 8), makeCoordinate(1, 1), board));	
 	}
 	
+	//Knight Piece Test
+	@Test 
+	public void testAllValidLKnightMoves() {
+		ChessPiece bn = factory.makePiece(BLACKKNIGHT);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+
+		assertTrue(bn.canMove(c, makeCoordinate(5,2), board));
+		assertTrue(bn.canMove(c, makeCoordinate(3,2), board));
+		assertTrue(bn.canMove(c, makeCoordinate(6,3), board));
+		assertTrue(bn.canMove(c, makeCoordinate(6,5), board));
+		assertTrue(bn.canMove(c, makeCoordinate(5,6), board));
+		assertTrue(bn.canMove(c, makeCoordinate(3,6), board));
+		assertTrue(bn.canMove(c, makeCoordinate(2,3), board));
+		assertTrue(bn.canMove(c, makeCoordinate(2,5), board));
+	}
 	
+	@Test 
+	public void testInvalidKnightMoves() {
+		ChessPiece bn = factory.makePiece(BLACKKNIGHT);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		assertFalse(bn.canMove(c, makeCoordinate(4,8), board));
+		assertFalse(bn.canMove(c, makeCoordinate(8,4), board));
+		assertFalse(bn.canMove(c, makeCoordinate(8,8), board));
+		assertFalse(bn.canMove(c, makeCoordinate(1,1), board));
+	}
 }

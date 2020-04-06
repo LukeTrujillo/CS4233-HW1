@@ -15,6 +15,7 @@ package gpv.chess;
 import gpv.PieceDescriptor;
 import static gpv.chess.PlayerColor.*;
 import static gpv.chess.PieceName.*;
+import static gpv.chess.ChessBehavior.*;
 
 /**
  * An enumeration that describes all of the chess piece types with methods
@@ -24,31 +25,33 @@ import static gpv.chess.PieceName.*;
  */
 public enum ChessPieceDescriptor implements PieceDescriptor
 {
-	WHITEPAWN(WHITE, PAWN), 
-	WHITEROOK(WHITE, ROOK),
-	WHITEKNIGHT(WHITE, KNIGHT), 
-	WHITEBISHOP(WHITE, BISHOP), 
-	WHITEQUEEN(WHITE, QUEEN), 
-	WHITEKING(WHITE, KING),
-	BLACKPAWN(BLACK, PAWN), 
-	BLACKROOK(BLACK, ROOK),
-	BLACKKNIGHT(BLACK, KNIGHT), 
-	BLACKBISHOP(BLACK, BISHOP), 
-	BLACKQUEEN(BLACK, QUEEN), 
-	BLACKKING(BLACK, KING);
+	WHITEPAWN(WHITE, PAWN, pawnBehavior), 
+	WHITEROOK(WHITE, ROOK, rookBehavior),
+	WHITEKNIGHT(WHITE, KNIGHT, knightBehavior), 
+	WHITEBISHOP(WHITE, BISHOP, bishopBehavior), 
+	WHITEQUEEN(WHITE, QUEEN, queenBehavior), 
+	WHITEKING(WHITE, KING, kingBehavior),
+	BLACKPAWN(BLACK, PAWN, pawnBehavior), 
+	BLACKROOK(BLACK, ROOK, rookBehavior),
+	BLACKKNIGHT(BLACK, KNIGHT, knightBehavior), 
+	BLACKBISHOP(BLACK, BISHOP, bishopBehavior), 
+	BLACKQUEEN(BLACK, QUEEN, queenBehavior), 
+	BLACKKING(BLACK, KING, kingBehavior);
 	
 	private PlayerColor color;
 	private PieceName name;
+	private Behavior behavior;
 	
 	/**
 	 * Private constructor to set the color and name in the instance.
 	 * @param color
 	 * @param name
 	 */
-	private ChessPieceDescriptor(PlayerColor color, PieceName name)
+	private ChessPieceDescriptor(PlayerColor color, PieceName name, Behavior behavior)
 	{
 		this.color = color;
 		this.name = name;
+		this.behavior = behavior;
 	}
 
 	/**
@@ -65,5 +68,13 @@ public enum ChessPieceDescriptor implements PieceDescriptor
 	public PieceName getName()
 	{
 		return name;
+	}
+	
+	/**
+	 * This will return the behavior assigned to the piece
+	 * @return the lambda to be run of the piece
+	 */
+	public Behavior getMoveBehavior() {
+		return behavior;
 	}
 }

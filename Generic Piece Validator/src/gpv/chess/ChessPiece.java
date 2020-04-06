@@ -68,8 +68,7 @@ public class ChessPiece implements Piece<ChessPieceDescriptor>
 	@Override
 	public boolean canMove(Coordinate from, Coordinate to, Board b)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return descriptor.getMoveBehavior().allowed(from, to, b);
 	}
 
 	/**
