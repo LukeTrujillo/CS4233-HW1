@@ -109,63 +109,83 @@ public interface ChessBehavior {
 
 	/**
 	 * This lambda represents the movement behavior of the Queen.
+	 * 
 	 * @return true if the queen can move to the spot, false if not
 	 */
 	public static Behavior queenBehavior = (from, to, board) -> {
-		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) //general behavior
+		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) // general behavior
 			return false;
 
-		// passed the general behavior test, now it must return true for one of the following behaviors
+		// passed the general behavior test, now it must return true for one of the
+		// following behaviors
 		return ChessBehavior.straightMovement.allowed(from, to, board)
 				|| ChessBehavior.orthogonalMovement.allowed(from, to, board);
 	};
-	
+
 	/**
 	 * This lambda controls the movement for the rook piece
+	 * 
 	 * @return true if it is trying to move to a valid spot, otherwise false
 	 */
 	public static Behavior rookBehavior = (from, to, board) -> {
-		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) //general behavior
+		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) // general behavior
 			return false;
-		
-		return ChessBehavior.straightMovement.allowed(from, to, board); //rooks only have straight movement
+
+		return ChessBehavior.straightMovement.allowed(from, to, board); // rooks only have straight movement
 	};
-	
+
 	public static Behavior pawnBehavior = (from, to, board) -> {
 		return false;
 	};
-	
+
 	/**
-	 * This lambda controls the movement for the knight piece. 
+	 * This lambda controls the movement for the knight piece.
+	 * 
 	 * @return true if knight can move to the spot, otherwise false.
 	 */
 	public static Behavior knightBehavior = (from, to, board) -> {
-		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) //general behavior
+		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) // general behavior
 			return false;
-		
+
 		final double DISTANCE = Math.sqrt(Math.pow(2, 2) + Math.pow(1, 2)); // a knight can only travel this distance
-		
+
 		int distanceX = (int) Math.abs(to.getX() - from.getX()); // the the delta change in the x
 		int distanceY = (int) Math.abs(to.getY() - from.getY()); // get the delta change in the y
-		
-		double attempted_distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2)); //get the distance travelld
+
+		double attempted_distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2)); // get the distance
+																								// travelld
 
 		return attempted_distance == DISTANCE; // these two must match
 	};
-	
+
 	/**
-	 * This function controls the movment for the bishop. Theu can only move diagonally
+	 * This function controls the movment for the bishop. Theu can only move
+	 * diagonally
+	 * 
 	 * @return true if the bishop can move to the spot, otherwise false
 	 */
 	public static Behavior bishopBehavior = (from, to, board) -> {
-		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) //general behavior
-			return false;	
-		
-		return ChessBehavior.orthogonalMovement.allowed(from, to, board); //the bishop can only move diagonally
-	};
-	public static Behavior kingBehavior = (from, to, board) -> {
-		return false;
+		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) // general behavior
+			return false;
+
+		return ChessBehavior.orthogonalMovement.allowed(from, to, board); // the bishop can only move diagonally
 	};
 	
+	/**
+	 * This function controls the movement for the king. They can move any direction but only to
+	 * adjacent blocks.
+	 * 
+	 * @return true if king can move here, otherwise false
+	 */
+	public static Behavior kingBehavior = (from, to, board) -> {
+		if (!ChessBehavior.generalBehavior.allowed(from, to, board)) // general behavior
+			return false;
+
+		int distanceX = (int) Math.abs(to.getX() - from.getX()); // the the delta change in the x
+		int distanceY = (int) Math.abs(to.getY() - from.getY()); // get the delta change in the y
+
+		return (distanceX <= 1 && distanceY <= 1) && (ChessBehavior.orthogonalMovement.allowed(from, to, board)
+				|| ChessBehavior.straightMovement.allowed(from, to, board)); // limit the distance to a max change of 1
+	};
 
 }
