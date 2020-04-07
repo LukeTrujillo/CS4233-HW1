@@ -264,5 +264,102 @@ public class ChessBehaviorTests {
 	}
 	
 	
+	//Test pawn behavior
+	@Test
+	public void testBlackBackwardMovement() {
+		ChessPiece bn = factory.makePiece(BLACKPAWN);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		assertTrue(bn.canMove(c, makeCoordinate(3, 4), board));
+		
+	}
+	@Test
+	public void testBlackPawnOnlyBackwardMovement() {
+		ChessPiece bn = factory.makePiece(BLACKPAWN);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		assertFalse(bn.canMove(c, makeCoordinate(4, 5), board));
+		assertFalse(bn.canMove(c, makeCoordinate(5, 4), board));
+		assertFalse(bn.canMove(c, makeCoordinate(3, 3), board));
+		assertFalse(bn.canMove(c, makeCoordinate(3, 5), board));
+	}
+	
+	@Test
+	public void testBlackPawnBackwardDiagonalWithEnemy() {
+		ChessPiece bn = factory.makePiece(BLACKPAWN);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		board.putPieceAt(factory.makePiece(WHITEPAWN), makeCoordinate(3, 3));
+		board.putPieceAt(factory.makePiece(WHITEPAWN), makeCoordinate(3, 5));
+		
+		assertTrue(bn.canMove(c, makeCoordinate(3, 3), board));
+		assertTrue(bn.canMove(c, makeCoordinate(3, 5), board));
+	}
+	
+	@Test
+	public void testBlackPawnNoBackwardsDiagonalWithEnemy() {
+		ChessPiece bn = factory.makePiece(BLACKPAWN);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		board.putPieceAt(factory.makePiece(WHITEPAWN), makeCoordinate(5, 3));
+		board.putPieceAt(factory.makePiece(WHITEPAWN), makeCoordinate(5, 5));
+		
+		assertFalse(bn.canMove(c, makeCoordinate(5, 3), board));
+		assertFalse(bn.canMove(c, makeCoordinate(5, 5), board));
+	}
+	
+	//white pawns now
+	@Test
+	public void testWhitePawnForwardMovement() {
+		ChessPiece bn = factory.makePiece(WHITEPAWN);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		assertTrue(bn.canMove(c, makeCoordinate(5, 4), board));
+		
+	}
+	@Test
+	public void testWhitePawnOnlyForwardMovement() {
+		ChessPiece bn = factory.makePiece(WHITEPAWN);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		assertFalse(bn.canMove(c, makeCoordinate(4, 3), board));
+		assertFalse(bn.canMove(c, makeCoordinate(3, 4), board));
+		assertFalse(bn.canMove(c, makeCoordinate(5, 4), board));
+		assertFalse(bn.canMove(c, makeCoordinate(5, 3), board));
+		assertFalse(bn.canMove(c, makeCoordinate(5, 5), board));
+	}
+	
+	@Test
+	public void testWhitePawnForwardDiagonalWithEnemy() {
+		ChessPiece bn = factory.makePiece(WHITEPAWN);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		board.putPieceAt(factory.makePiece(BLACKPAWN), makeCoordinate(5, 3));
+		board.putPieceAt(factory.makePiece(BLACKPAWN), makeCoordinate(5, 5));
+		
+		assertTrue(bn.canMove(c, makeCoordinate(5, 3), board));
+		assertTrue(bn.canMove(c, makeCoordinate(5, 5), board));
+	}
+	
+	@Test
+	public void testWhitePawnNoBackwardsDiagonalWithEnemy() {
+		ChessPiece bn = factory.makePiece(WHITEPAWN);
+		Coordinate c = makeCoordinate(4, 4);
+		board.putPieceAt(bn, c);
+		
+		board.putPieceAt(factory.makePiece(BLACKPAWN), makeCoordinate(3, 3));
+		board.putPieceAt(factory.makePiece(BLACKPAWN), makeCoordinate(3, 5));
+		
+		assertFalse(bn.canMove(c, makeCoordinate(3, 3), board));
+		assertFalse(bn.canMove(c, makeCoordinate(3, 5), board));
+	}
+	
 	
 }

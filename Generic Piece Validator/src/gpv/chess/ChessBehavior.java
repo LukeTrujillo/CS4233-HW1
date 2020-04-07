@@ -135,6 +135,11 @@ public interface ChessBehavior {
 	};
 
 	public static Behavior pawnBehavior = (from, to, board) -> {
+		/*
+		 * ASSUMPTION: black pieces can only move downward, (-x)
+		 * and white pieces can only move upward (-x)
+		 */
+		
 		return false;
 	};
 
