@@ -96,12 +96,16 @@ public class ChessRules {
 		}
 
 		// check if it is within one block
-		if (distanceX > 1 || distanceY > 1) {
+		if (( (distanceX > 1 && piece.hasMoved()) || distanceY > 1)) {
+			return false;
+		}
+		
+		if(!piece.hasMoved() &&  distanceX > 2) { //this is the case for the double move
 			return false;
 		}
 
 		// now check if it should be a straight move or a diagonal move
-		if (changeY == 0) { // straight move
+		if (changeY == 0 && board.getPieceAt(to) == null) { // straight move and its is an available space
 			return ChessBehavior.straightMovement.allowed(from, to, board); // just make sure it is straight movement
 		} else { // diagonal move
 			if (board.getPieceAt(makeCoordinate((int) from.getX() + changeX, (int) from.getY() + changeY)) == null) {
@@ -144,6 +148,38 @@ public class ChessRules {
 
 		return ChessBehavior.orthogonalMovement.allowed(from, to, board); // the bishop can only move diagonally
 	};
+	
+	/**
+	 * This lambda handles the functionality for the king castling case
+	 */
+	private static Behavior kingCastling = (from, to, board) -> {
+		int distanceX = (int) Math.abs(to.getX() - from.getX()); // the the delta change in the x
+		int distanceY = (int) Math.abs(to.getY() - from.getY()); // get the delta change in the y
+		
+		if(distanceY == 2 && distanceX == 0) { //if it is a castling attempt
+			int directionY = (int) ((to.getY() - from.getY()) / distanceY); //get the direction of the castle
+			
+			int rookY = 1; //and the position of the rook
+			if(directionY == 1) rookY = 8; //but if the direction is 1 then the rook is at y = 8
+			
+			ChessPiece king = (ChessPiece) board.getPieceAt(makeCoordinate((int) from.getX(), (int) from.getY())); //load the pieces
+			ChessPiece rook = (ChessPiece) board.getPieceAt(makeCoordinate((int) from.getX(), rookY)); //load the rook
+			
+			if(rook == null || rook.getName() != PieceName.ROOK || king.hasMoved() || rook.hasMoved() || king.getColor() != rook.getColor()) return false;
+			//make sure there is indeed a rook there and neither piece have moved
+			
+			for(int y = rookY; y != (int) from.getY(); y += directionY * -1) { //linear scan to see if there are no pieces in between
+				if(rookY == y) continue; //skip the first run
+				
+				if(board.getPieceAt(makeCoordinate((int) from.getX(), y)) != null) { //if there is not a null piece
+					return false; //return false 
+				}
+			}
+			return ChessBehavior.straightMovement.allowed(from, to, board); //check for valid straight movement
+		}	
+		
+		return true;
+	};
 
 	/**
 	 * This function controls the movement for the king. They can move any direction
@@ -158,28 +194,13 @@ public class ChessRules {
 		int distanceX = (int) Math.abs(to.getX() - from.getX()); // the the delta change in the x
 		int distanceY = (int) Math.abs(to.getY() - from.getY()); // get the delta change in the y
 
-		ChessPiece king = (ChessPiece) board.getPieceAt(makeCoordinate((int) from.getX(), (int) from.getY()));
-
-		if (distanceX == 0 && distanceY == 2 && !king.hasMoved()) { // possbile castling
-			int directionY = (int) ((to.getY() - from.getY()) / distanceY); // get the direction of the attempted move
-
-			int rookY = 1; //assume its moving to the left
-			if (directionY == 1) { //if it is actually moving to the right
-				rookY = 8; //move it to the right
-			} 
-
-			ChessPiece rook = (ChessPiece) board.getPieceAt(makeCoordinate((int) from.getX(), rookY)); //get the intented rook
-
-			if (rook != null && rook.getName() == PieceName.ROOK && !rook.hasMoved()
-					&& king.getColor() == rook.getColor()) { //if there is a rook that hasnt moved and its on the same team as the king
-				return ChessBehavior.straightMovement.allowed(from, to, board); //check for valid straight movement
-			}
-
-			return false; //return false at this point
+		if(distanceY == 2 && distanceX == 0) {
+			return kingCastling.allowed(from, to, board);
 		}
+		
 
 		return (distanceX <= 1 && distanceY <= 1) && (ChessBehavior.orthogonalMovement.allowed(from, to, board)
 				|| ChessBehavior.straightMovement.allowed(from, to, board)); // limit the distance to a max change of 1
 	};
-
+	
 }

@@ -1,5 +1,7 @@
 package gpv.chess;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.junit.jupiter.api.*;
 
 import gpv.util.Board;
@@ -503,7 +505,32 @@ public class ChessBehaviorTests {
 		assertFalse(king.canMove(makeCoordinate(1, 5), makeCoordinate(1, 7), board));
 	}
 	
+	@Test 
+    public void testPawnCanNotMoveForwardOnOccupiedSpace() {
+        ChessPiece bn = factory.makePiece(WHITEPAWN);
+        ChessPiece opp = factory.makePiece(BLACKKNIGHT);
+        
+        board.putPieceAt(bn, makeCoordinate(3, 2));
+        board.putPieceAt(opp, makeCoordinate(4, 2));
+        
+        assertFalse(bn.canMove(makeCoordinate(3, 2), makeCoordinate(4, 2), board));
+    }
 	
-	
+	@Test 
+    public void testPawnCanDoubleMoveOnFirstMove() {
+        ChessPiece p1 = factory.makePiece(WHITEPAWN);
+        ChessPiece p2 = factory.makePiece(WHITEPAWN);
+        
+        board.putPieceAt(p1, makeCoordinate(2, 2));
+        board.putPieceAt(p2, makeCoordinate(2, 3));
+        
+        assertFalse(p1.hasMoved());
+        assertFalse(p2.hasMoved());
+        
+        assertTrue(p1.canMove(makeCoordinate(2, 2), makeCoordinate(4, 2), board));
+        assertTrue(p2.canMove(makeCoordinate(2, 3), makeCoordinate(3, 3), board));
+        
+        assertFalse(p1.canMove(makeCoordinate(2, 2), makeCoordinate(5, 2), board));
+    }
 	
 }
