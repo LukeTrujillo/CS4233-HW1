@@ -68,7 +68,8 @@ public class ChessPiece implements Piece<ChessPieceDescriptor>
 	@Override
 	public boolean canMove(Coordinate from, Coordinate to, Board b)
 	{
-		return descriptor.getMoveBehavior().allowed(from, to, b);
+		PieceName name = ((ChessPieceDescriptor) b.getPieceAt(from).getDescriptor()).getName();
+		return ChessRules.getRules(name).allowed(from, to, b);
 	}
 
 	/**
